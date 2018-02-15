@@ -22,7 +22,9 @@ public class MainActivity extends AppCompatActivity  {
     FrameLayout fm;
     ShowCamera showCamera;
     ClarifaiApi clarifaiClient;
+    CloudSightApi cloudsightClient;
     Speech speech;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +33,8 @@ public class MainActivity extends AppCompatActivity  {
         speech = new Speech(getApplicationContext());
 
 
-
-
-        clarifaiClient = new ClarifaiApi("f715dbc340b44f428dc06d303bca1c50");
+        cloudsightClient = new CloudSightApi("UqT8ql42WXdWWFo7SFI7bQ", 6000, speech);
+        clarifaiClient = new ClarifaiApi("f715dbc340b44f428dc06d303bca1c50", speech);
 
         //connecting to frame_layout
         fm = (FrameLayout) findViewById(R.id.fl);
@@ -109,10 +110,8 @@ public class MainActivity extends AppCompatActivity  {
             Thread thread = new Thread(new Runnable() {
                 public void run() {
                     try {
-
-                      String talk_text =  clarifaiClient.PredictLive(data);
-
-                        speech.talk(talk_text);
+                       cloudsightClient.PredictLive(data);
+                       clarifaiClient.PredictLive(data);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

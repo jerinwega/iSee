@@ -23,16 +23,17 @@ import okhttp3.OkHttpClient;
 public class ClarifaiApi {
     ClarifaiClient client;
     List<String> resultList;
+    Speech speech;
 
-    public ClarifaiApi(String api_key) {
-
+    public ClarifaiApi(String api_key, Speech speech) {
+        this.speech = speech;
         this.client = new ClarifaiBuilder(api_key)
                 .client(new OkHttpClient()) // OPTIONAL. Allows customization of OkHttp by the user
                 .buildSync();
     }
 
 
-    public String PredictLive( byte[] data){
+    public void PredictLive( byte[] data){
 
         resultList = new ArrayList<String>();
 
@@ -61,7 +62,7 @@ public class ClarifaiApi {
                 }
             }
         }
-        return resultList.get(0);
+        speech.talk(resultList.get(0));
         }
 
     }
