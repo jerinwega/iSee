@@ -110,8 +110,9 @@ public class MainActivity extends AppCompatActivity  {
                 public void run() {
                     try {
 
-                        clarifaiClient.PredictLive(data);
-                        speech.talk("hello");
+                      String talk_text =  clarifaiClient.PredictLive(data);
+
+                        speech.talk(talk_text);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

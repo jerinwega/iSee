@@ -13,6 +13,7 @@ import clarifai2.dto.input.ClarifaiInput;
 import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import okhttp3.OkHttpClient;
@@ -21,29 +22,19 @@ import okhttp3.OkHttpClient;
 
 public class ClarifaiApi {
     ClarifaiClient client;
+    List<String> resultList;
 
     public ClarifaiApi(String api_key) {
-
 
         this.client = new ClarifaiBuilder(api_key)
                 .client(new OkHttpClient()) // OPTIONAL. Allows customization of OkHttp by the user
                 .buildSync();
     }
 
-    public void PredictbyUrl(String url) {
 
-        final List<ClarifaiOutput<Concept>> predictionResults =
-                this.client.getDefaultModels().generalModel() // You can also do client.getModelByID("id") to get your custom models
-                        .predict()
-                        .withInputs(
-                                ClarifaiInput.forImage(url))
-                        .executeSync()
-                        .get();
-        //  System.out.println(predictionResults);
+    public String PredictLive( byte[] data){
 
-    }
-
-    public List<ClarifaiOutput<Concept>> PredictLive(byte[] data) {
+        resultList = new ArrayList<String>();
 
         final List<ClarifaiOutput<Concept>> predictionResults =
                 this.client.getDefaultModels().generalModel() // You can also do client.getModelByID("id") to get your custom models
@@ -61,26 +52,18 @@ public class ClarifaiApi {
 
                 List<Concept> concepts = clarifaiOutput.data();
 
-                if(concepts != null && concepts.size() > 0) {
+                if (concepts != null && concepts.size() > 0) {
                     for (int j = 0; j < concepts.size(); j++) {
 
                         resultList.add(concepts.get(j).name());
                     }
+
                 }
             }
         }
-
-    }
-        return resultList;
-}
-
-
-            // System.out.println(predictionResults);
-
-
-
+        return resultList.get(0);
         }
-        return predictionResults;
 
     }
-}
+
+
