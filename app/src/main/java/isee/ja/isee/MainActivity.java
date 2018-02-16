@@ -3,16 +3,19 @@ package isee.ja.isee;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.media.MediaActionSound;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import java.util.Locale;
+import com.microsoft.projectoxford.vision.VisionServiceRestClient;
 
 /*CREATED BY JERIN ABRAHAM*/
 
@@ -24,16 +27,27 @@ public class MainActivity extends AppCompatActivity  {
     ClarifaiApi clarifaiClient;
     CloudSightApi cloudsightClient;
     Speech speech;
+    Shutter shutter;
+    MicrosoftApi microsoftApi;
+/*Endpoint: https://westcentralus.api.cognitive.microsoft.com/vision/v1.0
 
+Key 1: 4eed96992ea845c0b4f564747505a440
+
+Key 2: 9f0c55e1e08d4e1fb3ce42dff6c179e1
+*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Remove title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //Remove notification bar
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
         speech = new Speech(getApplicationContext());
-
-
-        cloudsightClient = new CloudSightApi("UqT8ql42WXdWWFo7SFI7bQ", 6000, speech);
+         shutter = new Shutter();
+        microsoftApi = new MicrosoftApi("4eed96992ea845c0b4f564747505a440", speech);
+        cloudsightClient = new CloudSightApi("UqT8ql42WXdWWFo7SFI7bQ", 10000, speech);
         clarifaiClient = new ClarifaiApi("f715dbc340b44f428dc06d303bca1c50", speech);
 
         //connecting to frame_layout
@@ -110,8 +124,10 @@ public class MainActivity extends AppCompatActivity  {
             Thread thread = new Thread(new Runnable() {
                 public void run() {
                     try {
-                       cloudsightClient.PredictLive(data);
-                       clarifaiClient.PredictLive(data);
+                        // microsoftApi.PredictLive(data);
+                         //microsoftApi.PredictOcr(data);
+                        // cloudsightClient.PredictLive(data);
+                        // clarifaiClient.PredictLive(data);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -129,6 +145,7 @@ public class MainActivity extends AppCompatActivity  {
         if (camera != null)
         {
             camera.takePicture(null, null, mPictureCallback);
+            shutter.playShutterSound();
         }
     }
 

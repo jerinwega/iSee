@@ -38,7 +38,7 @@ public class ShowCamera extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         Camera.Parameters params = camera.getParameters();
-
+     
         //to change orientations
 
         // checking resolution size

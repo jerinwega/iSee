@@ -104,6 +104,7 @@ public class CloudSightApi {
                         final String name = json.getString("name");
                         speech.talk(name);
 
+
                     }catch(Exception e)
                     {
                         e.printStackTrace();
@@ -114,5 +115,5 @@ public class CloudSightApi {
         });
 
     }
-    
+
 }

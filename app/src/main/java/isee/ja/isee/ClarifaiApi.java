@@ -61,7 +61,7 @@ public class ClarifaiApi {
 
                 }
             }
-        }
+        }System.out.println(resultList);
         speech.talk(resultList.get(0));
         }
 
