@@ -1,6 +1,8 @@
 package isee.ja.isee;
 
 
+import android.util.Log;
+
 import com.microsoft.projectoxford.vision.VisionServiceRestClient;
 import com.microsoft.projectoxford.vision.contract.AnalysisResult;
 import com.microsoft.projectoxford.vision.contract.LanguageCodes;
@@ -30,6 +32,7 @@ public class MicrosoftApi {
         // Put the image into an input stream for detection.
         ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
         AnalysisResult v = this.client.describe(inputStream, 1);
+        Log.d("iSee",v.description.captions.get(0).text);
         speech.talk(v.description.captions.get(0).text);
 
     }
@@ -39,11 +42,13 @@ public class MicrosoftApi {
         ocr = this.client.recognizeText(inputStream, LanguageCodes.AutoDetect, true);
 
         List<Line> lines = ocr.regions.get(0).lines;
+        Log.d("iSee",lines.toString());
         for (int i = 0; i < lines.size(); i++) {
             List <Word> words = lines.get(i).words;
             for (int j = 0; j < words.size(); j++) {
-              speech.talk(words.get(j).text.toString());
-             System.out.println(words.get(j).text.toString());
+
+                speech.talk(words.get(j).text.toString());
+
             }
             }
         }

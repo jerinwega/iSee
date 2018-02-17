@@ -1,6 +1,8 @@
 package isee.ja.isee;
 
 
+import android.util.Log;
+
 import org.json.JSONObject;
 import java.io.IOException;
 import okhttp3.Call;
@@ -99,10 +101,13 @@ public class CloudSightApi {
                 } else {
                     final String myResponse = response.body().string();
                     //System.out.println(myResponse);
+                    Log.d("iSee",myResponse);
+
                     try {
                         JSONObject json = new JSONObject(myResponse);
                         final String name = json.getString("name");
                         speech.talk(name);
+
 
 
                     }catch(Exception e)

@@ -1,46 +1,94 @@
 package isee.ja.isee;
 
-import android.os.AsyncTask;
 
+import android.util.Log;
+
+import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
-import com.google.cloud.vision.v1.AnnotateImageResponse;
-import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
-import com.google.cloud.vision.v1.EntityAnnotation;
-import com.google.cloud.vision.v1.Feature;
-import com.google.cloud.vision.v1.ImageAnnotatorClient;
-import com.microsoft.projectoxford.vision.VisionServiceRestClient;
-import com.microsoft.projectoxford.vision.rest.VisionServiceException;
-
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.vision.v1.Vision;
+import com.google.api.services.vision.v1.VisionRequestInitializer;
+import com.google.api.services.vision.v1.model.AnnotateImageRequest;
+import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest;
+import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
+import com.google.api.services.vision.v1.model.EntityAnnotation;
+import com.google.api.services.vision.v1.model.Feature;
+import com.google.api.services.vision.v1.model.Image;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-
-/**
- * Created by Avirachan on 16-02-2018.
- */
-
 public class GoogleVisionApi {
 
-    public Vision.Builder client;
+
     String apikey;
     Speech speech;
+    VisionRequestInitializer requestInitializer;
 
     public GoogleVisionApi(String key, Speech speech) {
         this.apikey = key;
         this.speech = speech;
-        this.client =  new Vision.Builder(
-                new NetHttpTransport(),
-                new AndroidJsonFactory(),
-                null);
-        this.client.setVisionRequestInitializer(
-                new VisionRequestInitializer(this.apikey));
-    }
-
-    public void PredictLive(byte[] data) throws IOException {
+        this.requestInitializer =
+                new VisionRequestInitializer(this.apikey);
 
     }
-}
+
+    public void PredictLive( byte[] data) throws IOException {
+    final byte[] img = data;
+
+        // Do the real work in an async task, because we need to use the network anyway
+
+                HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
+                JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
+
+                Vision.Builder builder = new Vision.Builder(httpTransport, jsonFactory, null);
+                builder.setVisionRequestInitializer(this.requestInitializer);
+
+                Vision vision = builder.build();
+
+                BatchAnnotateImagesRequest batchAnnotateImagesRequest =
+                        new BatchAnnotateImagesRequest();
+                batchAnnotateImagesRequest.setRequests(new ArrayList<AnnotateImageRequest>() {{
+                    AnnotateImageRequest annotateImageRequest = new AnnotateImageRequest();
+
+                    // Add the image
+                    Image base64EncodedImage = new Image();
+                    // Convert the bitmap to a JPEG
+                    // Just in case it's a format that Android understands but Cloud Vision
+
+                    // Base64 encode the JPEG
+                    base64EncodedImage.encodeContent(img);
+                    annotateImageRequest.setImage(base64EncodedImage);
+
+                    // add the features we want
+                    annotateImageRequest.setFeatures(new ArrayList<Feature>() {{
+                        Feature labelDetection = new Feature();
+                        labelDetection.setType("LABEL_DETECTION");
+                        labelDetection.setMaxResults(10);
+                        add(labelDetection);
+                    }});
+
+                    // Add the list of one thing to the request
+                    add(annotateImageRequest);
+                }});
+
+                Vision.Images.Annotate annotateRequest =
+                        vision.images().annotate(batchAnnotateImagesRequest);
+
+                BatchAnnotateImagesResponse response = annotateRequest.execute();
+                List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
+                if (labels != null) {
+                    // Prediction List Iteration
+                    Log.d("iSee",labels.toString());
+                    speech.talk(labels.get(0).getDescription());
+
+                }
+            }
+
+
+            }
+
+
+
+

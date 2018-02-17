@@ -2,6 +2,8 @@ package isee.ja.isee;
 
 
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -61,7 +63,9 @@ public class ClarifaiApi {
 
                 }
             }
-        }System.out.println(resultList);
+        }
+        Log.d("iSee",resultList.toString());
+
         speech.talk(resultList.get(0));
         }
 

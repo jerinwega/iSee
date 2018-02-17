@@ -15,7 +15,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.microsoft.projectoxford.vision.VisionServiceRestClient;
 
 /*CREATED BY JERIN ABRAHAM*/
 
@@ -26,12 +25,13 @@ public class MainActivity extends AppCompatActivity  {
     ShowCamera showCamera;
     ClarifaiApi clarifaiClient;
     CloudSightApi cloudsightClient;
+    GoogleVisionApi googleClient;
+    MicrosoftApi microsoftClient;
     Speech speech;
     Shutter shutter;
-    MicrosoftApi microsoftApi;
 
-/*google key
-AIzaSyDVegXm7a88cHEWuVGHAaJTKXSTiUcMB1A*/
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +43,10 @@ AIzaSyDVegXm7a88cHEWuVGHAaJTKXSTiUcMB1A*/
 
         speech = new Speech(getApplicationContext());
          shutter = new Shutter();
-        microsoftApi = new MicrosoftApi("4eed96992ea845c0b4f564747505a440", speech);
         cloudsightClient = new CloudSightApi("UqT8ql42WXdWWFo7SFI7bQ", 10000, speech);
+       googleClient= new GoogleVisionApi("AIzaSyDVegXm7a88cHEWuVGHAaJTKXSTiUcMB1A", speech);
+        microsoftClient = new MicrosoftApi("4eed96992ea845c0b4f564747505a440", speech);
+
         clarifaiClient = new ClarifaiApi("f715dbc340b44f428dc06d303bca1c50", speech);
 
         //connecting to frame_layout
@@ -121,10 +123,12 @@ AIzaSyDVegXm7a88cHEWuVGHAaJTKXSTiUcMB1A*/
             Thread thread = new Thread(new Runnable() {
                 public void run() {
                     try {
-                        // microsoftApi.PredictLive(data);
-                         //microsoftApi.PredictOcr(data);
-                        // cloudsightClient.PredictLive(data);
-                        // clarifaiClient.PredictLive(data);
+                        googleClient.PredictLive(data);
+                         microsoftClient.PredictLive(data);
+                       // microsoftClient.PredictOcr(data);
+                        cloudsightClient.PredictLive(data);
+                         clarifaiClient.PredictLive(data);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
