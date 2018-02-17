@@ -29,12 +29,9 @@ public class MainActivity extends AppCompatActivity  {
     Speech speech;
     Shutter shutter;
     MicrosoftApi microsoftApi;
-/*Endpoint: https://westcentralus.api.cognitive.microsoft.com/vision/v1.0
 
-Key 1: 4eed96992ea845c0b4f564747505a440
-
-Key 2: 9f0c55e1e08d4e1fb3ce42dff6c179e1
-*/
+/*google key
+AIzaSyDVegXm7a88cHEWuVGHAaJTKXSTiUcMB1A*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
