@@ -9,11 +9,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Scene;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 
 /*CREATED BY JERIN ABRAHAM*/
@@ -117,17 +122,55 @@ public class MainActivity extends AppCompatActivity  {
 
 // to get the picture after callback
 
-    Camera.PictureCallback mPictureCallback = new Camera.PictureCallback() {
+    Camera.PictureCallback ObjectCallback = new Camera.PictureCallback() {
         @Override
         public void onPictureTaken(final byte[] data, Camera camera) {
             Thread thread = new Thread(new Runnable() {
                 public void run() {
                     try {
-                        googleClient.PredictLive(data);
-                         microsoftClient.PredictLive(data);
-                       // microsoftClient.PredictOcr(data);
+                    googleClient.PredictLive(data);
+                    clarifaiClient.PredictLive(data);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+
+            camera.startPreview();
+
+        }
+    };
+    Camera.PictureCallback SceneCallback = new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(final byte[] data, Camera camera) {
+            Thread thread = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        microsoftClient.PredictLive(data);
                         cloudsightClient.PredictLive(data);
-                         clarifaiClient.PredictLive(data);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+
+            camera.startPreview();
+
+        }
+    };
+    Camera.PictureCallback TextCallback = new Camera.PictureCallback() {
+        @Override
+        public void onPictureTaken(final byte[] data, Camera camera) {
+            Thread thread = new Thread(new Runnable() {
+                public void run() {
+                    try {
+
+                        microsoftClient.PredictOcr(data);
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -142,12 +185,27 @@ public class MainActivity extends AppCompatActivity  {
     };
 
     public void IdentifyImage(View v) {
+        Button b = (Button)v;
+        String buttonText = b.getText().toString();
 
         if (camera != null)
         {
-            camera.takePicture(null, null, mPictureCallback);
             shutter.playShutterSound();
+            switch (buttonText)
+            {
+                case "OBJECT" : camera.takePicture(null, null, ObjectCallback);
+                    break;
+
+                case "SCENE" : camera.takePicture(null, null, SceneCallback);
+                    break;
+
+                case "TEXT" : camera.takePicture(null, null, TextCallback);
+                    break;
+
+            }
+
         }
+
     }
 
 

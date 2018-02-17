@@ -38,19 +38,23 @@ public class MicrosoftApi {
     }
     public void PredictOcr(byte[] data) throws VisionServiceException, IOException {
         OCR ocr;
+        String temp = "";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
         ocr = this.client.recognizeText(inputStream, LanguageCodes.AutoDetect, true);
 
         List<Line> lines = ocr.regions.get(0).lines;
-        Log.d("iSee",lines.toString());
+
+        Log.d("iSee",ocr.toString());
         for (int i = 0; i < lines.size(); i++) {
-            List <Word> words = lines.get(i).words;
+            List<Word> words = lines.get(i).words;
             for (int j = 0; j < words.size(); j++) {
 
-                speech.talk(words.get(j).text.toString());
+                temp = temp + " " + words.get(j).text.toString();
 
             }
-            }
+        }
+        speech.talk(temp);
+        Log.d("iSee", temp);
         }
 
 }
