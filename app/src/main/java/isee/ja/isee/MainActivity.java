@@ -3,6 +3,7 @@ package isee.ja.isee;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -185,17 +186,52 @@ public class MainActivity extends AppCompatActivity  {
         String buttonText = b.getText().toString();
 
         if (camera != null)
-        {
+        {   final Camera.Parameters params = camera.getParameters();
+            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            camera.setParameters(params);
+
             shutter.playShutterSound();
             switch (buttonText)
             {
-                case "OBJECT" : camera.takePicture(null, null, ObjectCallback);
+                case "OBJECT" :
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run(){
+                            camera.takePicture(null, null, ObjectCallback);
+                             params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                            camera.setParameters(params);
+                            shutter.playShutterSound();
+                        }
+                    }, 3000);
+
                     break;
 
-                case "SCENE" : camera.takePicture(null, null, SceneCallback);
+                case "SCENE" :
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run(){
+                            camera.takePicture(null, null, SceneCallback);
+                            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                            camera.setParameters(params);
+                            shutter.playShutterSound();
+                        }
+                    }, 3000);
+
                     break;
 
-                case "TEXT" : camera.takePicture(null, null, TextCallback);
+                case "TEXT" :
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run(){
+                            camera.takePicture(null, null, TextCallback);
+                            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                            camera.setParameters(params);
+                            shutter.playShutterSound();
+                        }
+                    }, 3000);
                     break;
 
             }
