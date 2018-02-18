@@ -3,14 +3,11 @@ package isee.ja.isee;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
-import android.media.MediaActionSound;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.Scene;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,7 +15,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
 
 
 /*CREATED BY JERIN ABRAHAM*/
@@ -34,7 +30,6 @@ public class MainActivity extends AppCompatActivity  {
     MicrosoftApi microsoftClient;
     Speech speech;
     Shutter shutter;
-
 
 
     @Override
@@ -83,6 +78,7 @@ public class MainActivity extends AppCompatActivity  {
         try {
             camera = Camera.open();
             showCamera = new ShowCamera(this, camera);
+
             //to open camera
             fm.addView(showCamera);
         } catch (Exception e) {

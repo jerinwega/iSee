@@ -2,7 +2,6 @@ package isee.ja.isee;
 
 
 import android.util.Log;
-
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -37,7 +36,6 @@ public class GoogleVisionApi {
     public void PredictLive( byte[] data) throws IOException {
     final byte[] img = data;
 
-        // Do the real work in an async task, because we need to use the network anyway
 
                 HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
                 JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
@@ -55,13 +53,12 @@ public class GoogleVisionApi {
                     // Add the image
                     Image base64EncodedImage = new Image();
                     // Convert the bitmap to a JPEG
-                    // Just in case it's a format that Android understands but Cloud Vision
 
                     // Base64 encode the JPEG
                     base64EncodedImage.encodeContent(img);
                     annotateImageRequest.setImage(base64EncodedImage);
 
-                    // add the features we want
+                    // add the feature
                     annotateImageRequest.setFeatures(new ArrayList<Feature>() {{
                         Feature labelDetection = new Feature();
                         labelDetection.setType("LABEL_DETECTION");
@@ -79,7 +76,6 @@ public class GoogleVisionApi {
                 BatchAnnotateImagesResponse response = annotateRequest.execute();
                 List<EntityAnnotation> labels = response.getResponses().get(0).getLabelAnnotations();
                 if (labels != null) {
-                    // Prediction List Iteration
                     Log.d("iSee",labels.toString());
                     speech.talk(labels.get(0).getDescription());
 

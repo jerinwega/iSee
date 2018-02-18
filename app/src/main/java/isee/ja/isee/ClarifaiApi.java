@@ -4,19 +4,12 @@ package isee.ja.isee;
 
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import clarifai2.api.ClarifaiBuilder;
-import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.dto.input.ClarifaiInput;
 import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import okhttp3.OkHttpClient;
 
@@ -40,7 +33,7 @@ public class ClarifaiApi {
         resultList = new ArrayList<String>();
 
         final List<ClarifaiOutput<Concept>> predictionResults =
-                this.client.getDefaultModels().generalModel() // You can also do client.getModelByID("id") to get your custom models
+                this.client.getDefaultModels().generalModel()
                         .predict()
                         .withInputs(
                                 ClarifaiInput.forImage(data))

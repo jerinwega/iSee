@@ -2,7 +2,6 @@ package isee.ja.isee;
 
 
 import android.util.Log;
-
 import org.json.JSONObject;
 import java.io.IOException;
 import okhttp3.Call;
