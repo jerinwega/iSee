@@ -99,7 +99,7 @@ public class CloudSightApi {
                     throw new IOException("Unexpected code " + response);
                 } else {
                     final String myResponse = response.body().string();
-                    //System.out.println(myResponse);
+                    System.out.println(myResponse);
                     Log.d("iSee",myResponse);
 
                     try {

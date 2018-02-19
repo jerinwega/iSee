@@ -52,6 +52,7 @@ public class ClarifaiApi {
                     for (int j = 0; j < concepts.size(); j++) {
 
                         resultList.add(concepts.get(j).name());
+                        System.out.println(concepts.get(j).name());
                     }
 
                 }
@@ -60,7 +61,9 @@ public class ClarifaiApi {
         Log.d("iSee",resultList.toString());
 
         speech.talk(resultList.get(0));
+
         }
+
 
     }
 

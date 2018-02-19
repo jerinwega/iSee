@@ -42,13 +42,13 @@ public class MainActivity extends AppCompatActivity  {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
+
         speech = new Speech(getApplicationContext());
          shutter = new Shutter();
         cloudsightClient = new CloudSightApi("UqT8ql42WXdWWFo7SFI7bQ", 10000, speech);
-       googleClient= new GoogleVisionApi("AIzaSyDVegXm7a88cHEWuVGHAaJTKXSTiUcMB1A", speech);
+        googleClient= new GoogleVisionApi("AIzaSyDVegXm7a88cHEWuVGHAaJTKXSTiUcMB1A", speech);
         microsoftClient = new MicrosoftApi("4eed96992ea845c0b4f564747505a440", speech);
-
-        clarifaiClient = new ClarifaiApi("f715dbc340b44f428dc06d303bca1c50", speech);
+        clarifaiClient = new ClarifaiApi("e824e2c1bc464f1286aadc7cbb793d4b", speech);
 
         //connecting to frame_layout
         fm = (FrameLayout) findViewById(R.id.fl);

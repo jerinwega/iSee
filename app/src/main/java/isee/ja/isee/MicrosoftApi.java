@@ -33,6 +33,7 @@ public class MicrosoftApi {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
         AnalysisResult v = this.client.describe(inputStream, 1);
         Log.d("iSee",v.description.captions.get(0).text);
+        System.out.println(v.description.captions.get(0).text);
         speech.talk(v.description.captions.get(0).text);
 
     }
